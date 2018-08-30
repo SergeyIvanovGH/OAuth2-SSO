@@ -26,3 +26,6 @@ target/
 .mvn
 mvnw
 mvnw.*
+
+# VSCode
+.vscode

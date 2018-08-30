@@ -13,11 +13,10 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 @EnableAuthorizationServer
 public class OAuth2AuthorizationServer extends AuthorizationServerConfigurerAdapter {
 
-	@Autowired
 	private AuthenticationManager authenticationManager;
 
 	@Override
-	public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
+	public void configure(AuthorizationServerSecurityConfigurer security) {
 		security.checkTokenAccess("permitAll()")
 				.tokenKeyAccess("isAuthenticated()");
 	}
@@ -28,11 +27,17 @@ public class OAuth2AuthorizationServer extends AuthorizationServerConfigurerAdap
 				.withClient("client")
 				.secret("secret")
 				.authorizedGrantTypes("authorization_code", "refresh_token", "password")
+				.scopes("read_profile")
 				.autoApprove(true);
 	}
 
 	@Override
-	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+	public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
 		endpoints.authenticationManager(authenticationManager);
+	}
+
+	@Autowired
+	public void setAuthenticationManager(AuthenticationManager authenticationManager) {
+		this.authenticationManager = authenticationManager;
 	}
 }
